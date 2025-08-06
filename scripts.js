@@ -6,35 +6,20 @@ menuToggle.addEventListener('click', () => {
   navLinks.classList.toggle('active');
 });
 
-// Close menu when clicking on a link
+// Close mobile nav when clicking a link
 document.querySelectorAll('.nav-links a').forEach(link => {
   link.addEventListener('click', () => {
     navLinks.classList.remove('active');
   });
 });
 
-// Animation on scroll
+// Animate elements on scroll
 document.addEventListener('DOMContentLoaded', () => {
-  const animatedItems = document.querySelectorAll('.feature-card, .project-card');
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  
-  animatedItems.forEach(item => {
-    observer.observe(item);
-  });
-  
-  // Load project cards
+  animateOnScroll();
   fetchAndRenderProjectCards();
 });
 
-// Hero image floating animation
+// Floating hero image animation reset
 const heroImage = document.querySelector('.hero-image');
 if (heroImage) {
   setInterval(() => {
@@ -45,40 +30,52 @@ if (heroImage) {
   }, 4000);
 }
 
-// Project cards from markdown
+// Animate cards when they enter viewport
+function animateOnScroll() {
+  const animatedItems = document.querySelectorAll('.feature-card, .project-card');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  animatedItems.forEach(item => observer.observe(item));
+}
+
+// Fetch and render project cards from raw GitHub content
 async function fetchAndRenderProjectCards() {
   const container = document.querySelector('.projects-grid');
+  const repo = 'bright-horizon-tech/braincell-posts';
+  const branch = 'projects';
+  const files = ['FolderFlow.md']; // Add more filenames here if needed
 
-  try {
-    const res = await fetch('https://api.github.com/repos/bright-horizon-tech/braincell-posts/contents/projects');
-    const files = await res.json();
+  for (const file of files) {
+    const rawUrl = `https://raw.githubusercontent.com/${repo}/${branch}/projects/${file}`;
 
-    for (const file of files) {
-      if (file.name.endsWith('.md')) {
-        const rawMdRes = await fetch(file.download_url);
-        const rawMd = await rawMdRes.text();
+    try {
+      const rawMd = await (await fetch(rawUrl)).text();
+      const lines = rawMd.split('\n').filter(line => line.trim());
+      const title = lines[0].replace(/^#\s*/, '') || file.replace('.md', '');
+      const previewMd = lines.slice(1, 5).join(' ');
+      const previewHTML = marked.parse(previewMd);
 
-        const lines = rawMd.split('\n').filter(l => l.trim());
-        const title = lines[0].replace(/^#\s*/, '') || file.name.replace('.md', '');
-        const previewMd = lines.slice(1, 5).join(' ');
-        const previewHTML = marked.parse(previewMd);
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <div class="project-content">
+          <h3>${title}</h3>
+          <div class="md-preview">${previewHTML}</div>
+          <button class="btn view-full" data-url="${rawUrl}">View Full</button>
+        </div>
+      `;
+      container.appendChild(card);
 
-        const card = document.createElement('div');
-        card.className = 'project-card';
-        card.innerHTML = `
-          <div class="project-content">
-            <h3>${title}</h3>
-            <div class="md-preview">${previewHTML}</div>
-            <button class="btn view-full" data-url="${file.download_url}">View Full</button>
-          </div>
-        `;
-        container.appendChild(card);
-      }
-    }
-
-    // Add animation to new cards
-    document.querySelectorAll('.project-card:not(.visible)').forEach(card => {
-      const observer = new IntersectionObserver((entries) => {
+      // Animate the card on scroll
+      const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
@@ -86,18 +83,13 @@ async function fetchAndRenderProjectCards() {
           }
         });
       }, { threshold: 0.1 });
-      
       observer.observe(card);
-    });
 
-    // Add click handlers to buttons
-    document.querySelectorAll('.view-full').forEach(button => {
-      button.addEventListener('click', async () => {
-        const fullUrl = button.dataset.url;
-        const fullMd = await (await fetch(fullUrl)).text();
+      // Full view popup handler
+      card.querySelector('.view-full').addEventListener('click', async () => {
+        const fullMd = await (await fetch(rawUrl)).text();
         const fullHTML = marked.parse(fullMd);
 
-        // Create popup/modal
         const popup = document.createElement('div');
         popup.className = 'popup-markdown';
         popup.innerHTML = `
@@ -107,24 +99,22 @@ async function fetchAndRenderProjectCards() {
           </div>
         `;
         document.body.appendChild(popup);
-        
-        // Add animation
+
         setTimeout(() => {
           popup.style.opacity = '1';
           popup.querySelector('.popup-content').style.transform = 'scale(1)';
         }, 10);
 
-        // Close handler
         popup.querySelector('.close-popup').addEventListener('click', () => {
           popup.style.opacity = '0';
           popup.querySelector('.popup-content').style.transform = 'scale(0.95)';
           setTimeout(() => popup.remove(), 300);
         });
       });
-    });
 
-  } catch (err) {
-    console.error("Error fetching markdown files:", err);
-    container.innerHTML = `<p class="error">Couldn't load projects. Try again later.</p>`;
+    } catch (err) {
+      console.error(`Error loading ${file}:`, err);
+      container.innerHTML = `<p class="error">Couldn't load project cards. Please try again later.</p>`;
+    }
   }
 }
