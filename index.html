@@ -8,7 +8,6 @@
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.3.6/dist/purify.min.js"></script>
 </head>
 <body>
   <!-- Header -->
@@ -104,51 +103,18 @@ No theme, just thoughts.</p>
   </section>
 
   <!-- Projects Section -->
-  <section class="projects">
-    <div class="container">
-      <div class="section-title">
-        <h2>Featured Projects</h2>
-        <p>A selection of my recent work and experiments</p>
-      </div>
-
-      <!-- Search and filter controls -->
-      <div class="projects-controls">
-        <div class="search-bar">
-          <input type="text" id="project-search" placeholder="Search projects...">
-          <i class="fas fa-search"></i>
-        </div>
-        
-        <div class="filters">
-          <select id="tag-filter">
-            <option value="">All Tags</option>
-            <!-- Tags will be populated dynamically -->
-          </select>
-          <select id="sort-projects">
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="alphabetical">A-Z</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="projects-grid">
-        <!-- Project cards will be dynamically inserted here -->
-      </div>
-
-      <!-- Loading spinner -->
-      <div class="loading-spinner" id="loading-spinner">
-        <div class="spinner"></div>
-        <p>Loading projects...</p>
-      </div>
-
-      <!-- Pagination controls -->
-      <div class="pagination" id="pagination">
-        <button id="prev-page" class="btn btn-outline"><i class="fas fa-chevron-left"></i> Previous</button>
-        <span id="page-info">Page 1 of 1</span>
-        <button id="next-page" class="btn btn-outline">Next <i class="fas fa-chevron-right"></i></button>
-      </div>
+<section class="projects">
+  <div class="container">
+    <div class="section-title">
+      <h2>Featured Projects</h2>
+      <p>A selection of my recent work and experiments</p>
     </div>
-  </section>
+    
+    <div class="projects-grid">
+      <!-- Project cards will be dynamically inserted here -->
+    </div>
+  </div>
+</section>
 
   <!-- Stats Section -->
   <section class="stats">
