@@ -32,32 +32,51 @@ async function fetchAndRenderProjectCards() {
   const baseUrl = 'https://raw.githubusercontent.com/bright-horizon-tech/braincell-posts/projects/';
   const fileList = [
     'FolderFlow.md',
-    // ⬇️ Add more .md file names below when you create them
     // 'AnotherProject.md',
     // 'YetAnother.md'
   ];
 
-  // Load only first 12 projects
-  const filesToLoad = fileList.slice(0, 12);
+  const filesToLoad = fileList.slice(0, 12); // cap it at 12
 
   for (const fileName of filesToLoad) {
     try {
       const response = await fetch(`${baseUrl}${fileName}`);
       if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
-      
+
       const rawMd = await response.text();
       const lines = rawMd.split('\n');
-      const title = lines[0]?.replace(/^#\s*/, '') || fileName.replace('.md', '');
-      
-      // Extract description until first '---'
+
+      // 🔍 Step 1: Skip frontmatter if it exists
+      let contentStart = 0;
+      if (lines[0].trim() === '---') {
+        for (let i = 1; i < lines.length; i++) {
+          if (lines[i].trim() === '---') {
+            contentStart = i + 1;
+            break;
+          }
+        }
+      }
+
+      // 🧠 Step 2: Grab title and preview content
+      let title = '';
       let description = '';
-      for (let i = 1; i < lines.length; i++) {
-        if (lines[i].trim() === '---') break;
+
+      for (let i = contentStart; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!title && line.startsWith('#')) {
+          title = line.replace(/^#\s*/, '');
+          continue;
+        }
+        if (line === '---') break; // Stop if another separator
         description += lines[i] + '\n';
       }
-      
+
+      // Fallback if no heading found
+      if (!title) title = fileName.replace('.md', '');
+
       const previewHTML = marked.parse(description);
 
+      // 🧱 Build project card
       const card = document.createElement('div');
       card.className = 'project-card';
       card.innerHTML = `
@@ -73,7 +92,8 @@ async function fetchAndRenderProjectCards() {
       container.appendChild(card);
     } catch (err) {
       console.warn(`Couldn't fetch ${fileName}:`, err);
-      // Create placeholder card
+
+      // 🧱 Build placeholder error card
       const card = document.createElement('div');
       card.className = 'project-card';
       card.innerHTML = `
@@ -101,8 +121,8 @@ function setupPopups() {
       const url = e.target.dataset.url;
       openModal(url);
     }
-    
-    if (e.target.classList.contains('close-popup') || 
+
+    if (e.target.classList.contains('close-popup') ||
         e.target.classList.contains('popup-markdown')) {
       closeModal();
     }
@@ -121,7 +141,7 @@ async function openModal(url) {
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to load project');
-    
+
     const fullMd = await response.text();
     const fullHTML = marked.parse(fullMd);
 
@@ -136,8 +156,7 @@ async function openModal(url) {
     document.body.appendChild(popup);
     document.body.style.overflow = 'hidden';
     currentModal = popup;
-    
-    // Add focus for accessibility
+
     popup.querySelector('.close-popup').focus();
   } catch (err) {
     console.error('Error loading project:', err);
@@ -156,7 +175,7 @@ function closeModal() {
   }
 }
 
-// 🧃 On page load, do the things
+// 🧃 Ready spaghetti
 document.addEventListener('DOMContentLoaded', () => {
   fetchAndRenderProjectCards();
 });
