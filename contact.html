@@ -5,22 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TheOnlyBrainCell.in | Contact</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <style>
-    :root {
-      --primary: #4361ee;
-      --secondary: #3f37c9;
-      --accent: #4cc9f0;
-      --light: #f8f9fa;
-      --dark: #212529;
-      --gray: #6c757d;
-      --light-gray: #e9ecef;
-      --transition: all 0.3s ease;
-      --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-      --border-radius: 10px;
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -30,18 +15,20 @@
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.6;
-      color: var(--dark);
-      background-color: var(--light);
+      color: #212529;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
       overflow-x: hidden;
     }
 
     /* Header Styles */
     header {
-      background-color: white;
-      box-shadow: var(--shadow);
-      position: sticky;
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
       top: 0;
+      width: 100%;
       z-index: 1000;
+      backdrop-filter: blur(5px);
     }
 
     .container {
@@ -65,11 +52,11 @@
       text-decoration: none;
       font-weight: 700;
       font-size: 1.5rem;
-      color: var(--primary);
+      color: #4cc9f0;
     }
 
     .logo i {
-      color: var(--accent);
+      color: #4361ee;
     }
 
     .nav-links {
@@ -79,29 +66,30 @@
 
     .nav-links a {
       text-decoration: none;
-      color: var(--dark);
+      color: #f8f9fa;
       font-weight: 500;
-      transition: var(--transition);
+      transition: all 0.3s ease;
       position: relative;
+      padding: 5px 0;
     }
 
     .nav-links a:hover {
-      color: var(--primary);
+      color: #4cc9f0;
     }
 
     .nav-links a.active {
-      color: var(--primary);
+      color: #4361ee;
       font-weight: 600;
     }
 
     .nav-links a.active:after {
       content: '';
       position: absolute;
-      bottom: -5px;
+      bottom: 0;
       left: 0;
       width: 100%;
       height: 2px;
-      background-color: var(--primary);
+      background: linear-gradient(90deg, #4361ee, #4cc9f0);
     }
 
     .menu-toggle {
@@ -110,75 +98,89 @@
       border: none;
       font-size: 1.5rem;
       cursor: pointer;
-      color: var(--dark);
+      color: #f8f9fa;
     }
 
-    /* Floating Dots Background */
-    .dots-background {
+    /* Dot Animation Container */
+    .dot-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      z-index: -1;
+      height: 100vh;
       overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .dot {
       position: absolute;
-      background-color: rgba(67, 97, 238, 0.2);
       border-radius: 50%;
+      opacity: 0.8;
       pointer-events: none;
+      transform: translate(-50%, -50%);
     }
 
     /* Contact Hero */
     .contact-hero {
       position: relative;
-      padding: 150px 0 100px;
-      background: linear-gradient(135deg, #3a0ca3 0%, #4361ee 50%, #4cc9f0 100%);
+      padding: 180px 0 100px;
       color: white;
       text-align: center;
       overflow: hidden;
-      min-height: 70vh;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      opacity: 0;
+      transform: translateY(20px);
     }
 
     .hero-content {
       position: relative;
       z-index: 10;
+      max-width: 800px;
+      padding: 0 20px;
     }
 
     .contact-hero h1 {
       font-size: 4rem;
       margin-bottom: 20px;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-      transform: translateY(50px);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      background: linear-gradient(90deg, #4361ee, #4cc9f0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       opacity: 0;
+      transform: translateY(30px);
     }
 
     .contact-hero p {
       font-size: 1.5rem;
-      max-width: 700px;
       margin: 0 auto 40px;
       opacity: 0.9;
-      transform: translateY(50px);
+      color: #f0f4ff;
       opacity: 0;
+      transform: translateY(30px);
     }
 
     /* Contact Section */
     .contact-section {
       position: relative;
       padding: 80px 0;
-      background-color: #f8f9fa;
+      background: rgba(10, 15, 35, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      max-width: 1300px;
+      margin: 40px auto;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: translateY(30px);
     }
 
     .contact-container {
       display: flex;
       gap: 40px;
-      max-width: 1300px;
-      margin: 0 auto;
       padding: 0 20px;
     }
 
@@ -187,13 +189,12 @@
     }
 
     .contact-card, .form-card {
-      background: white;
+      background: rgba(25, 35, 70, 0.7);
       border-radius: 20px;
       padding: 40px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-      transform: translateY(50px);
-      opacity: 0;
-      transition: all 0.5s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(67, 97, 238, 0.2);
+      backdrop-filter: blur(5px);
     }
 
     .contact-card {
@@ -209,14 +210,12 @@
       width: 100%;
       height: 5px;
       background: linear-gradient(90deg, #4361ee, #4cc9f0);
-      transform: scaleX(0);
       transform-origin: left;
-      transition: transform 0.8s ease;
     }
 
     .contact-card h2, .form-card h2 {
       margin-bottom: 30px;
-      color: #4361ee;
+      color: #4cc9f0;
       font-size: 1.8rem;
       display: flex;
       align-items: center;
@@ -245,11 +244,11 @@
 
     .contact-detail h3 {
       margin-bottom: 5px;
-      color: #333;
+      color: #f0f4ff;
     }
 
     .contact-detail p {
-      color: #666;
+      color: #a0a9ff;
       line-height: 1.6;
     }
 
@@ -263,19 +262,21 @@
       width: 45px;
       height: 45px;
       border-radius: 50%;
-      background: #f0f4ff;
+      background: rgba(67, 97, 238, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #4361ee;
+      color: #4cc9f0;
       font-size: 1.2rem;
       transition: all 0.3s ease;
+      border: 1px solid rgba(76, 201, 240, 0.3);
     }
 
     .social-btn:hover {
       background: #4361ee;
       color: white;
       transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
     }
 
     .form-group {
@@ -286,7 +287,7 @@
       display: block;
       margin-bottom: 8px;
       font-weight: 500;
-      color: #444;
+      color: #f0f4ff;
     }
 
     .form-group input,
@@ -294,10 +295,12 @@
     .form-group textarea {
       width: 100%;
       padding: 14px;
-      border: 2px solid #e0e4ff;
+      background: rgba(25, 35, 70, 0.5);
+      border: 2px solid rgba(67, 97, 238, 0.3);
       border-radius: 10px;
       font-size: 1rem;
       transition: all 0.3s ease;
+      color: white;
     }
 
     .form-group input:focus,
@@ -306,6 +309,7 @@
       border-color: #4361ee;
       box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
       outline: none;
+      background: rgba(25, 35, 70, 0.7);
     }
 
     .submit-btn {
@@ -325,11 +329,12 @@
       transition: all 0.4s ease;
       position: relative;
       overflow: hidden;
+      margin-top: 10px;
     }
 
     .submit-btn:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
+      box-shadow: 0 10px 20px rgba(67, 97, 238, 0.5);
     }
 
     .submit-btn:active {
@@ -354,9 +359,11 @@
 
     /* Footer */
     footer {
-      background-color: var(--dark);
+      background-color: rgba(0, 0, 0, 0.8);
       color: white;
       padding: 70px 0 30px;
+      margin-top: 80px;
+      border-top: 1px solid rgba(67, 97, 238, 0.2);
     }
 
     .footer-grid {
@@ -370,6 +377,7 @@
       margin-bottom: 25px;
       font-size: 1.4rem;
       position: relative;
+      color: #4cc9f0;
     }
 
     .footer-col h3:after {
@@ -379,7 +387,7 @@
       left: 0;
       width: 50px;
       height: 3px;
-      background-color: var(--accent);
+      background: linear-gradient(90deg, #4361ee, #4cc9f0);
     }
 
     .footer-links {
@@ -393,11 +401,11 @@
     .footer-links a {
       color: rgba(255, 255, 255, 0.7);
       text-decoration: none;
-      transition: var(--transition);
+      transition: all 0.3s ease;
     }
 
     .footer-links a:hover {
-      color: var(--accent);
+      color: #4cc9f0;
       padding-left: 5px;
     }
 
@@ -442,13 +450,13 @@
         top: 80px;
         left: 0;
         right: 0;
-        background-color: white;
+        background-color: rgba(10, 15, 35, 0.95);
         flex-direction: column;
         align-items: center;
         padding: 30px 0;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         transform: translateY(-150%);
         transition: transform 0.4s ease;
+        backdrop-filter: blur(10px);
       }
       
       .nav-links.active {
@@ -481,8 +489,8 @@
   </style>
 </head>
 <body>
-  <!-- Floating Dots Background -->
-  <div class="dots-background" id="dotsContainer"></div>
+  <!-- Dot Animation Container -->
+  <div class="dot-container" id="dotContainer"></div>
 
   <!-- Header -->
   <header>
@@ -508,7 +516,7 @@
   </header>
 
   <!-- Contact Hero -->
-  <section class="contact-hero">
+  <section class="contact-hero" id="contactHero">
     <div class="hero-content">
       <h1 id="heroTitle">Let's Connect & Create</h1>
       <p id="heroSubtitle">Got an idea? A question? Or just want to chat about the universe? Reach out!</p>
@@ -516,11 +524,11 @@
   </section>
 
   <!-- Contact Section -->
-  <section class="contact-section">
-    <div class="contact-container">
+  <section class="contact-section" id="contactSection">
+    <div class="container contact-container">
       <!-- Contact Info Card -->
       <div class="contact-info">
-        <div class="contact-card" id="contactCard">
+        <div class="contact-card">
           <h2><i class="fas fa-id-card"></i> Contact Details</h2>
           
           <div class="contact-detail">
@@ -583,7 +591,7 @@
       
       <!-- Contact Form -->
       <div class="contact-form">
-        <div class="form-card" id="formCard">
+        <div class="form-card">
           <h2><i class="fas fa-paper-plane"></i> Send a Message</h2>
           <form id="contactForm">
             <div class="form-group">
@@ -681,138 +689,105 @@
   </footer>
 
   <script>
-    // Initialize GSAP
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Create randomized dots
+    // Create colorful dots that fill the header
     function createDots() {
-      const dotsContainer = document.getElementById('dotsContainer');
-      const dotCount = 150; // Increased number of dots
+      const container = document.getElementById('dotContainer');
+      const dotCount = 200;
+      const colors = ['#4361ee', '#3a0ca3', '#4cc9f0', '#7209b7', '#f72585'];
       
-      // Clear existing dots
-      dotsContainer.innerHTML = '';
-      
+      // Create dots
       for (let i = 0; i < dotCount; i++) {
         const dot = document.createElement('div');
         dot.classList.add('dot');
         
-        // Random size (1px to 4px)
-        const size = Math.random() * 3 + 1;
+        // Random position
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        dot.style.left = `${posX}%`;
+        dot.style.top = `${posY}%`;
+        
+        // Random size (5-10px)
+        const size = Math.floor(Math.random() * 6) + 5;
         dot.style.width = `${size}px`;
         dot.style.height = `${size}px`;
         
-        // Random position
-        dot.style.left = `${Math.random() * 100}%`;
-        dot.style.top = `${Math.random() * 100}%`;
+        // Random color
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        dot.style.backgroundColor = color;
         
-        // Random color opacity
-        const opacity = Math.random() * 0.3 + 0.1;
-        dot.style.backgroundColor = `rgba(67, 97, 238, ${opacity})`;
+        // Store original position for animation
+        dot.dataset.originalX = posX;
+        dot.dataset.originalY = posY;
         
-        dotsContainer.appendChild(dot);
-        
-        // Animate each dot
-        animateDot(dot);
+        container.appendChild(dot);
       }
     }
 
-    // Animate individual dot
-    function animateDot(dot) {
-      // Random movement parameters
-      const duration = Math.random() * 10 + 5; // 5-15 seconds
-      const delay = Math.random() * 5;
-      const xDistance = Math.random() * 200 - 100; // -100 to 100px
-      const yDistance = Math.random() * 200 - 100; // -100 to 100px
+    // Animate dots to scatter
+    function scatterDots() {
+      const dots = document.querySelectorAll('.dot');
       
-      gsap.to(dot, {
-        x: `+=${xDistance}`,
-        y: `+=${yDistance}`,
-        duration: duration,
-        delay: delay,
-        ease: "sine.inOut",
-        repeat: -1,
-        yoyo: true
+      dots.forEach(dot => {
+        // Calculate random movement direction and distance
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 50 + Math.random() * 100; // 50-150vw distance
+        
+        // Calculate final position
+        const endX = parseFloat(dot.dataset.originalX) + Math.cos(angle) * distance;
+        const endY = parseFloat(dot.dataset.originalY) + Math.sin(angle) * distance;
+        
+        // Apply animation
+        dot.animate([
+          { 
+            transform: `translate(-50%, -50%)`,
+            opacity: 0.9
+          },
+          { 
+            transform: `translate(${endX - 50}vw, ${endY - 50}vh)`,
+            opacity: 0
+          }
+        ], {
+          duration: 1500 + Math.random() * 1000,
+          easing: 'cubic-bezier(0.2, 0.8, 0.4, 1)',
+          fill: 'forwards'
+        });
       });
     }
 
+    // Reveal content after dot animation
+    function revealContent() {
+      // Reveal hero section
+      document.getElementById('contactHero').style.opacity = '1';
+      document.getElementById('contactHero').style.transform = 'translateY(0)';
+      
+      // Animate hero text
+      setTimeout(() => {
+        document.getElementById('heroTitle').style.opacity = '1';
+        document.getElementById('heroTitle').style.transform = 'translateY(0)';
+      }, 300);
+      
+      setTimeout(() => {
+        document.getElementById('heroSubtitle').style.opacity = '1';
+        document.getElementById('heroSubtitle').style.transform = 'translateY(0)';
+      }, 600);
+      
+      // Reveal contact section
+      setTimeout(() => {
+        document.getElementById('contactSection').style.opacity = '1';
+        document.getElementById('contactSection').style.transform = 'translateY(0)';
+      }, 1500);
+    }
+
     // Mobile nav toggle
-    document.getElementById('menuToggle')?.addEventListener('click', () => {
-      document.getElementById('navLinks')?.classList.toggle('active');
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
     });
 
     document.querySelectorAll('.nav-links a').forEach(link => {
       link.addEventListener('click', () => {
-        document.getElementById('navLinks')?.classList.remove('active');
+        document.getElementById('navLinks').classList.remove('active');
       });
     });
-
-    // Page animations
-    function animatePage() {
-      // Hero text animation
-      gsap.to("#heroTitle", {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        delay: 0.3,
-        ease: "power3.out"
-      });
-
-      gsap.to("#heroSubtitle", {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        delay: 0.5,
-        ease: "power3.out"
-      });
-
-      // Contact card animations
-      gsap.to("#contactCard", {
-        scrollTrigger: {
-          trigger: "#contactCard",
-          start: "top 80%",
-          toggleActions: "play none none none"
-        },
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        ease: "power3.out",
-        onComplete: () => document.querySelector('.contact-card').classList.add('animate')
-      });
-
-      gsap.to("#formCard", {
-        scrollTrigger: {
-          trigger: "#formCard",
-          start: "top 80%",
-          toggleActions: "play none none none"
-        },
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        delay: 0.3,
-        ease: "power3.out",
-        onComplete: () => document.querySelector('.form-card').classList.add('animate')
-      });
-
-      // Form input animations
-      const inputs = document.querySelectorAll('.form-group input, .form-group select, .form-group textarea');
-      inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-          gsap.to(this, {
-            scale: 1.02,
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-        
-        input.addEventListener('blur', function() {
-          gsap.to(this, {
-            scale: 1,
-            duration: 0.3,
-            ease: "power2.out"
-          });
-        });
-      });
-    }
 
     // Form submission handling
     document.getElementById('contactForm').addEventListener('submit', function(e) {
@@ -840,43 +815,39 @@ ${message}`;
       const encodedMessage = encodeURIComponent(whatsappMessage);
       
       // WhatsApp number (replace with your actual number)
-      const whatsappNumber = "919876543210"; // Example number
+      const whatsappNumber = "919876543210";
       
       // Create WhatsApp URL
       const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
       
       // Animation for button before redirecting
       const submitBtn = document.querySelector('.submit-btn');
-      gsap.to(submitBtn, {
-        scale: 0.95,
-        backgroundColor: "#3a0ca3",
-        duration: 0.3,
-        onComplete: function() {
-          // Open WhatsApp in new tab
-          window.open(whatsappUrl, '_blank');
-          
-          // Reset button animation
-          gsap.to(submitBtn, {
-            scale: 1,
-            backgroundColor: "#4361ee",
-            duration: 0.3,
-            delay: 0.5
-          });
-          
-          // Reset form
-          document.getElementById('contactForm').reset();
-        }
-      });
+      submitBtn.style.background = 'linear-gradient(135deg, #3a0ca3, #7209b7)';
+      
+      // Open WhatsApp in new tab after a short delay
+      setTimeout(() => {
+        window.open(whatsappUrl, '_blank');
+        
+        // Reset button animation
+        setTimeout(() => {
+          submitBtn.style.background = 'linear-gradient(135deg, #4361ee, #3f37c9)';
+        }, 1000);
+        
+        // Reset form
+        document.getElementById('contactForm').reset();
+      }, 800);
     });
 
     // Initialize everything when page loads
     window.addEventListener('load', () => {
       createDots();
-      animatePage();
+      
+      // Start dot animation after a brief delay
+      setTimeout(() => {
+        scatterDots();
+        revealContent();
+      }, 500);
     });
-
-    // Recreate dots when window resizes
-    window.addEventListener('resize', createDots);
   </script>
 </body>
 </html>
