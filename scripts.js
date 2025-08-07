@@ -176,3 +176,10 @@ function closeModal() {
 document.addEventListener('DOMContentLoaded', () => {
   fetchAndRenderProjectCards();
 });
+
+// Add active class to current page in navigation
+document.querySelectorAll('.nav-links a').forEach(link => {
+  if (link.href === window.location.href) {
+    link.classList.add('active');
+  }
+});
