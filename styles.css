@@ -443,7 +443,7 @@ footer {
   color: #ff4d94;
 }
 
-/* Modal Styles */
+/* 🌌 Modal Styles: Fully Revamped */
 .popup-markdown {
   position: fixed;
   top: 0;
@@ -519,8 +519,8 @@ footer {
   max-width: 100%;
 }
 
-.markdown-content h1, 
-.markdown-content h2, 
+.markdown-content h1,
+.markdown-content h2,
 .markdown-content h3 {
   color: var(--dark);
   margin-bottom: 20px;
@@ -561,7 +561,7 @@ footer {
   margin: 20px 0;
 }
 
-.markdown-content th, 
+.markdown-content th,
 .markdown-content td {
   padding: 10px;
   border: 1px solid var(--light-gray);
@@ -578,6 +578,29 @@ footer {
   margin: 20px 0;
   background-color: rgba(76, 201, 240, 0.05);
   border-radius: 0 8px 8px 0;
+}
+
+/* 📱 Responsive Tweaks */
+@media (max-width: 768px) {
+  .popup-content {
+    padding: 30px 20px;
+    max-height: 85vh;
+  }
+
+  .close-popup {
+    top: 10px;
+    right: 10px;
+    font-size: 1.8rem;
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-content {
+    width: 95%;
+    padding: 25px 15px;
+  }
 }
 
 /* Responsive Design */
@@ -705,3 +728,4 @@ footer {
     font-size: 1.4rem;
   }
 }
+
