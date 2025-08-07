@@ -21,45 +21,79 @@
   opacity: 0.9;
 }
 
-/* Floating animation elements */
-.floating-element {
-  position: absolute;
+/* Update sizes and add more variation */
+.floating-1, .floating-2, .floating-3, .floating-4,
+.floating-5, .floating-6, .floating-7, .floating-8 {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
+  position: absolute;
   z-index: 0;
 }
 
+/* Smaller sizes and more speed */
 .floating-1 {
-  width: 120px;
-  height: 120px;
-  top: 20%;
-  left: 10%;
-  animation: float 15s ease-in-out infinite;
+  width: 40px;
+  height: 40px;
+  top: 10%;
+  left: 5%;
+  animation: float 8s ease-in-out infinite;
 }
 
 .floating-2 {
-  width: 80px;
-  height: 80px;
-  top: 60%;
-  right: 15%;
-  animation: float 12s ease-in-out infinite reverse;
+  width: 30px;
+  height: 30px;
+  top: 20%;
+  right: 10%;
+  animation: float 6s ease-in-out infinite reverse;
 }
 
 .floating-3 {
-  width: 200px;
-  height: 200px;
-  bottom: -50px;
-  left: 30%;
-  animation: float 20s ease-in-out infinite;
+  width: 50px;
+  height: 50px;
+  bottom: 10%;
+  left: 20%;
+  animation: float 10s ease-in-out infinite;
 }
 
 .floating-4 {
-  width: 150px;
-  height: 150px;
-  top: 20%;
-  right: 25%;
-  animation: float 18s ease-in-out infinite reverse;
+  width: 35px;
+  height: 35px;
+  top: 30%;
+  right: 20%;
+  animation: float 9s ease-in-out infinite reverse;
+}
+
+.floating-5 {
+  width: 25px;
+  height: 25px;
+  top: 50%;
+  left: 15%;
+  animation: float 7s ease-in-out infinite;
+}
+
+.floating-6 {
+  width: 45px;
+  height: 45px;
+  bottom: 5%;
+  right: 10%;
+  animation: float 11s ease-in-out infinite reverse;
+}
+
+.floating-7 {
+  width: 30px;
+  height: 30px;
+  bottom: 15%;
+  left: 5%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.floating-8 {
+  width: 40px;
+  height: 40px;
+  top: 60%;
+  right: 30%;
+  animation: float 8s ease-in-out infinite reverse;
 }
 
 @keyframes float {
@@ -67,12 +101,13 @@
     transform: translateY(0) rotate(0deg);
   }
   50% {
-    transform: translateY(-20px) rotate(180deg);
+    transform: translateY(-10px) rotate(180deg); /* Less floaty */
   }
   100% {
     transform: translateY(0) rotate(360deg);
   }
 }
+
 
 .contact-section {
   padding: 80px 0;
