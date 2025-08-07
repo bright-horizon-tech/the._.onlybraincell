@@ -3,18 +3,21 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize GSAP animations
   gsap.registerPlugin(ScrollTrigger);
-  
-  // Setup floating elements animation
-  const floatElements = gsap.utils.toArray('.floating-element');
-  floatElements.forEach((el, i) => {
-    gsap.to(el, {
-      y: i % 2 === 0 ? 20 : -20,
-      duration: 3 + i,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut"
-    });
+
+  floatElements.forEach(el => {
+  const distance = Math.floor(Math.random() * 20) + 10;
+  const duration = Math.random() * 5 + 4;
+  const direction = Math.random() > 0.5 ? 1 : -1;
+
+  gsap.to(el, {
+    y: direction * distance,
+    duration: duration,
+    repeat: -1,
+    yoyo: true,
+    ease: "sine.inOut"
   });
+});
+
   
   // Contact card animations
   const contactCard = document.querySelector('.contact-card');
