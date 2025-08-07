@@ -9,17 +9,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   });
 });
 
-// 🎈 Floaty hero image vibes
-const heroImage = document.querySelector('.hero-image');
-if (heroImage) {
-  setInterval(() => {
-    heroImage.style.animation = 'none';
-    setTimeout(() => {
-      heroImage.style.animation = 'float 4s ease-in-out infinite';
-    }, 10);
-  }, 4000);
-}
-
 // 🚀 Scroll-in animation for project and feature cards
 function setupScrollAnimations() {
   const elements = document.querySelectorAll('.feature-card, .project-card');
@@ -35,7 +24,7 @@ function setupScrollAnimations() {
   elements.forEach(el => observer.observe(el));
 }
 
-// 📂 Load project cards from raw GitHub folder (not using GitHub API)
+// 📂 Load project cards from raw GitHub folder
 async function fetchAndRenderProjectCards() {
   const container = document.querySelector('.projects-grid');
   if (!container) return;
@@ -48,17 +37,33 @@ async function fetchAndRenderProjectCards() {
     // 'YetAnother.md'
   ];
 
-  for (const fileName of fileList) {
+  // Load only first 12 projects
+  const filesToLoad = fileList.slice(0, 12);
+
+  for (const fileName of filesToLoad) {
     try {
-      const rawMd = await (await fetch(`${baseUrl}${fileName}`)).text();
+      const response = await fetch(`${baseUrl}${fileName}`);
+      if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
+      
+      const rawMd = await response.text();
       const lines = rawMd.split('\n').filter(Boolean);
       const title = lines[0]?.replace(/^#\s*/, '') || fileName.replace('.md', '');
-      const previewMd = lines.slice(1, 5).join(' ');
-      const previewHTML = marked.parse(previewMd);
+      
+      // Extract description until first '---'
+      let description = '';
+      for (let i = 1; i < lines.length; i++) {
+        if (lines[i].trim() === '---') break;
+        description += lines[i] + '\n';
+      }
+      
+      const previewHTML = marked.parse(description);
 
       const card = document.createElement('div');
       card.className = 'project-card';
       card.innerHTML = `
+        <div class="project-icon">
+          <i class="fas fa-project-diagram"></i>
+        </div>
         <div class="project-content">
           <h3>${title}</h3>
           <div class="md-preview">${previewHTML}</div>
@@ -68,6 +73,20 @@ async function fetchAndRenderProjectCards() {
       container.appendChild(card);
     } catch (err) {
       console.warn(`Couldn't fetch ${fileName}:`, err);
+      // Create placeholder card
+      const card = document.createElement('div');
+      card.className = 'project-card';
+      card.innerHTML = `
+        <div class="project-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="project-content">
+          <h3>${fileName.replace('.md', '')}</h3>
+          <div class="md-preview">Failed to load project details</div>
+          <button class="btn" disabled>Unavailable</button>
+        </div>
+      `;
+      container.appendChild(card);
     }
   }
 
@@ -75,35 +94,67 @@ async function fetchAndRenderProjectCards() {
   setupPopups();
 }
 
-// 🧠 Full view popup logic
+// 🧠 Full view modal logic
 function setupPopups() {
   document.querySelectorAll('.view-full').forEach(btn => {
     btn.addEventListener('click', async () => {
       const url = btn.dataset.url;
-      const fullMd = await (await fetch(url)).text();
-      const fullHTML = marked.parse(fullMd);
+      
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Failed to load project');
+        
+        const fullMd = await response.text();
+        const fullHTML = marked.parse(fullMd);
 
-      const popup = document.createElement('div');
-      popup.className = 'popup-markdown';
-      popup.innerHTML = `
-        <div class="popup-content">
-          <button class="close-popup">&times;</button>
-          <div class="markdown-content">${fullHTML}</div>
-        </div>
-      `;
-      document.body.appendChild(popup);
+        const popup = document.createElement('div');
+        popup.className = 'popup-markdown';
+        popup.innerHTML = `
+          <div class="popup-content">
+            <button class="close-popup">&times;</button>
+            <div class="markdown-content">${fullHTML}</div>
+          </div>
+        `;
+        document.body.appendChild(popup);
+        
+        // Show popup
+        setTimeout(() => {
+          popup.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }, 10);
 
-      // Animate popup
-      setTimeout(() => {
-        popup.style.opacity = '1';
-        popup.querySelector('.popup-content').style.transform = 'scale(1)';
-      }, 10);
-
-      popup.querySelector('.close-popup').addEventListener('click', () => {
-        popup.style.opacity = '0';
-        popup.querySelector('.popup-content').style.transform = 'scale(0.95)';
-        setTimeout(() => popup.remove(), 300);
-      });
+        // Close button
+        popup.querySelector('.close-popup').addEventListener('click', () => {
+          popup.classList.remove('active');
+          document.body.style.overflow = '';
+          setTimeout(() => popup.remove(), 300);
+        });
+        
+        // Close on ESC key
+        document.addEventListener('keydown', function escClose(e) {
+          if (e.key === 'Escape') {
+            popup.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => {
+              popup.remove();
+              document.removeEventListener('keydown', escClose);
+            }, 300);
+          }
+        });
+        
+        // Close on outside click
+        popup.addEventListener('click', (e) => {
+          if (e.target === popup) {
+            popup.classList.remove('active');
+            document.body.style.overflow = '';
+            setTimeout(() => popup.remove(), 300);
+          }
+        });
+        
+      } catch (err) {
+        console.error('Error loading project:', err);
+        alert('Failed to load project details. Please try again later.');
+      }
     });
   });
 }
