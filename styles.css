@@ -157,6 +157,7 @@ header {
   font-weight: 600;
   transition: var(--transition);
   border: 2px solid var(--primary);
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -307,6 +308,10 @@ header {
   flex-grow: 1;
   margin-bottom: 20px;
   color: var(--gray);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
 }
 
 .project-tags {
@@ -445,7 +450,7 @@ footer {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0, 0.95);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -473,6 +478,7 @@ footer {
   position: relative;
   transform: scale(0.95);
   transition: transform 0.3s ease;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
 }
 
 .popup-markdown.active .popup-content {
@@ -495,15 +501,22 @@ footer {
   justify-content: center;
   border-radius: 50%;
   transition: var(--transition);
+  z-index: 10;
 }
 
 .close-popup:hover {
   background-color: var(--light-gray);
   color: var(--dark);
+  transform: rotate(90deg);
 }
 
 .markdown-content {
   padding: 20px 0;
+  overflow-wrap: break-word;
+}
+
+.markdown-content > * {
+  max-width: 100%;
 }
 
 .markdown-content h1, 
@@ -524,6 +537,7 @@ footer {
   border-radius: 5px;
   overflow-x: auto;
   margin: 20px 0;
+  font-size: 0.95rem;
 }
 
 .markdown-content code {
@@ -531,6 +545,39 @@ footer {
   background-color: var(--light-gray);
   padding: 2px 5px;
   border-radius: 3px;
+  font-size: 0.95rem;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.markdown-content th, 
+.markdown-content td {
+  padding: 10px;
+  border: 1px solid var(--light-gray);
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: rgba(67, 97, 238, 0.1);
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid var(--accent);
+  padding: 10px 20px;
+  margin: 20px 0;
+  background-color: rgba(76, 201, 240, 0.05);
+  border-radius: 0 8px 8px 0;
 }
 
 /* Responsive Design */
@@ -548,6 +595,10 @@ footer {
   
   .hero h1 {
     font-size: 2.8rem;
+  }
+  
+  .projects-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 
@@ -585,6 +636,25 @@ footer {
   
   .popup-content {
     padding: 30px 20px;
+    max-height: 85vh;
+  }
+  
+  .close-popup {
+    top: 10px;
+    right: 10px;
+    font-size: 1.8rem;
+    width: 35px;
+    height: 35px;
+  }
+  
+  .feature-card,
+  .project-card {
+    padding: 30px 20px;
+  }
+  
+  .project-icon {
+    height: 180px;
+    font-size: 3.5rem;
   }
 }
 
@@ -599,5 +669,39 @@ footer {
   
   .stat-number {
     font-size: 2.5rem;
+  }
+  
+  .hero {
+    padding: 70px 0;
+  }
+  
+  .features,
+  .projects {
+    padding: 70px 0;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .popup-content {
+    width: 95%;
+    padding: 25px 15px;
+  }
+  
+  .markdown-content {
+    padding: 15px 0;
+  }
+  
+  .markdown-content h1 {
+    font-size: 1.8rem;
+  }
+  
+  .markdown-content h2 {
+    font-size: 1.6rem;
+  }
+  
+  .markdown-content h3 {
+    font-size: 1.4rem;
   }
 }
