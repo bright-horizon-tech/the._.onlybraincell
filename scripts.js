@@ -46,7 +46,7 @@ async function fetchAndRenderProjectCards() {
       if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
       
       const rawMd = await response.text();
-      const lines = rawMd.split('\n').filter(Boolean);
+      const lines = rawMd.split('\n');
       const title = lines[0]?.replace(/^#\s*/, '') || fileName.replace('.md', '');
       
       // Extract description until first '---'
@@ -96,67 +96,64 @@ async function fetchAndRenderProjectCards() {
 
 // 🧠 Full view modal logic
 function setupPopups() {
-  document.querySelectorAll('.view-full').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const url = btn.dataset.url;
-      
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error('Failed to load project');
-        
-        const fullMd = await response.text();
-        const fullHTML = marked.parse(fullMd);
-
-        const popup = document.createElement('div');
-        popup.className = 'popup-markdown';
-        popup.innerHTML = `
-          <div class="popup-content">
-            <button class="close-popup">&times;</button>
-            <div class="markdown-content">${fullHTML}</div>
-          </div>
-        `;
-        document.body.appendChild(popup);
-        
-        // Show popup
-        setTimeout(() => {
-          popup.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        }, 10);
-
-        // Close button
-        popup.querySelector('.close-popup').addEventListener('click', () => {
-          popup.classList.remove('active');
-          document.body.style.overflow = '';
-          setTimeout(() => popup.remove(), 300);
-        });
-        
-        // Close on ESC key
-        document.addEventListener('keydown', function escClose(e) {
-          if (e.key === 'Escape') {
-            popup.classList.remove('active');
-            document.body.style.overflow = '';
-            setTimeout(() => {
-              popup.remove();
-              document.removeEventListener('keydown', escClose);
-            }, 300);
-          }
-        });
-        
-        // Close on outside click
-        popup.addEventListener('click', (e) => {
-          if (e.target === popup) {
-            popup.classList.remove('active');
-            document.body.style.overflow = '';
-            setTimeout(() => popup.remove(), 300);
-          }
-        });
-        
-      } catch (err) {
-        console.error('Error loading project:', err);
-        alert('Failed to load project details. Please try again later.');
-      }
-    });
+  document.body.addEventListener('click', function(e) {
+    if (e.target.classList.contains('view-full')) {
+      const url = e.target.dataset.url;
+      openModal(url);
+    }
+    
+    if (e.target.classList.contains('close-popup') || 
+        e.target.classList.contains('popup-markdown')) {
+      closeModal();
+    }
   });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+}
+
+let currentModal = null;
+
+async function openModal(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to load project');
+    
+    const fullMd = await response.text();
+    const fullHTML = marked.parse(fullMd);
+
+    const popup = document.createElement('div');
+    popup.className = 'popup-markdown';
+    popup.innerHTML = `
+      <div class="popup-content">
+        <button class="close-popup">&times;</button>
+        <div class="markdown-content">${fullHTML}</div>
+      </div>
+    `;
+    document.body.appendChild(popup);
+    document.body.style.overflow = 'hidden';
+    currentModal = popup;
+    
+    // Add focus for accessibility
+    popup.querySelector('.close-popup').focus();
+  } catch (err) {
+    console.error('Error loading project:', err);
+    alert('Failed to load project details. Please try again later.');
+  }
+}
+
+function closeModal() {
+  if (currentModal) {
+    currentModal.classList.add('closing');
+    setTimeout(() => {
+      currentModal.remove();
+      document.body.style.overflow = '';
+      currentModal = null;
+    }, 300);
+  }
 }
 
 // 🧃 On page load, do the things
