@@ -42,7 +42,7 @@ async function fetchAndRenderProjectCards() {
 
     for (const fileName of filesToLoad) {
       try {
-        const response = await fetch(`${baseUrl}${fileName}`);
+        const response = await fetch(`${baseUrl}${encodeURIComponent(fileName)}`);
         if (!response.ok) throw new Error(`Failed to fetch ${fileName}`);
 
         const rawMd = await response.text();
@@ -174,3 +174,4 @@ document.querySelectorAll('.nav-links a').forEach(link => {
     link.classList.add('active');
   }
 });
+
